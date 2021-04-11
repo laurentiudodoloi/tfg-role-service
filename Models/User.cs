@@ -1,11 +1,11 @@
 using System;
+using System.Collections.Generic;
 
 namespace RoleService.Models
 {
     public class User : BaseModel
     {
         public Guid Id { get; set; }
-        public string Name { get; set; }
-        public DateTime CreateDate { get; set; }
+        public virtual ICollection<Role> UserRoles { get; set; }
     }
 }

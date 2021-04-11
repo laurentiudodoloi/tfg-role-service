@@ -14,12 +14,10 @@ namespace RoleService.Controllers
     public class UserRoleController : ControllerBase
     {
         private readonly IRoleRepository _roleRepository;
-        private readonly IUserRoleRepository _userRoleRepository;
 
-        public UserRoleController(IRoleRepository roleRepository, IUserRoleRepository userRoleRepository)
+        public UserRoleController(IRoleRepository roleRepository)
         {
             _roleRepository = roleRepository;
-            _userRoleRepository = userRoleRepository;
         }
 
         [HttpGet("{userId}")]
@@ -46,7 +44,7 @@ namespace RoleService.Controllers
                 CreateDate = DateTime.Now
             };
 
-            _roleRepository.Create(role);
+            // TODO: Save user role.
 
             return Created(nameof(Role), role);
         }
@@ -56,15 +54,7 @@ namespace RoleService.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public ActionResult<Role> Delete(Guid id, DeleteRoleRequest request)
         {
-            UserRole userRole = _userRoleRepository.GetById(id);
-            if (userRole == null)
-            {
-                return NotFound("User role not found");
-            }
-
-            _userRoleRepository.Remove(id);
-
-            return Ok();
+            throw new NotImplementedException();
         }
     }
 }
