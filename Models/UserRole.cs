@@ -9,10 +9,10 @@ namespace RoleService.Models
     {
         public Guid Id { get; set; }
 
-        [Key, Column(Order = 1)]
+        [Column(Order = 1)]
         public Guid UserId { get; set; }
 
-        [Key, Column(Order = 2)]
+        [Column(Order = 2)]
         public Guid RoleId { get; set; }
 
         public User User { get; set; }
