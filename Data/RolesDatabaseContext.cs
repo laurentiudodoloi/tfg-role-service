@@ -13,10 +13,5 @@ namespace RoleService.Data
         {
             //
         }
-
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<UserRole>().HasKey(userRole => new { userRole.UserId, userRole.RoleId });
-        }
     }
 }

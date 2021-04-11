@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RoleService.Data;
 
-namespace RoleService.Migrations
+namespace tfg_role_service.Migrations
 {
     [DbContext(typeof(RolesDatabaseContext))]
     partial class RolesDatabaseContextModelSnapshot : ModelSnapshot
@@ -32,17 +32,7 @@ namespace RoleService.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("RoleId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("RoleId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Roles");
                 });
@@ -82,27 +72,16 @@ namespace RoleService.Migrations
                     b.ToTable("UserRoles");
                 });
 
-            modelBuilder.Entity("RoleService.Models.Role", b =>
-                {
-                    b.HasOne("RoleService.Models.Role", null)
-                        .WithMany("UserRoles")
-                        .HasForeignKey("RoleId");
-
-                    b.HasOne("RoleService.Models.User", null)
-                        .WithMany("UserRoles")
-                        .HasForeignKey("UserId");
-                });
-
             modelBuilder.Entity("RoleService.Models.UserRole", b =>
                 {
                     b.HasOne("RoleService.Models.Role", "Role")
-                        .WithMany()
+                        .WithMany("Users")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("RoleService.Models.User", "User")
-                        .WithMany()
+                        .WithMany("Roles")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -114,12 +93,12 @@ namespace RoleService.Migrations
 
             modelBuilder.Entity("RoleService.Models.Role", b =>
                 {
-                    b.Navigation("UserRoles");
+                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("RoleService.Models.User", b =>
                 {
-                    b.Navigation("UserRoles");
+                    b.Navigation("Roles");
                 });
 #pragma warning restore 612, 618
         }

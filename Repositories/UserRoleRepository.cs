@@ -38,5 +38,18 @@ namespace RoleService.Repositories
             _context.Roles.Remove(role);
             _context.SaveChanges();
         }
+
+        public IEnumerable<Role> GetUserRoles(Guid userId)
+        {
+            var x = from u in _context.Users
+                    from r in _context.Roles
+                    from ur in _context.UserRoles
+                    where u.Id == userId
+                    where u.Id == ur.UserId
+                    where r.Id == ur.RoleId
+                    select r;
+
+            return x.ToList<Role>();
+        }
     }
 }

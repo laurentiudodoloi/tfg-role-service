@@ -11,6 +11,5 @@ namespace RoleService.Models
         public string Name { get; set; }
         [Required]
         public DateTime CreateDate { get; set; }
-        public virtual ICollection<Role> UserRoles { get; set; }
     }
 }
