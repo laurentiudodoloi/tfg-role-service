@@ -8,7 +8,7 @@ namespace RoleService.Repositories
 {
     public class RoleRepository : IRoleRepository
     {
-        private RolesDatabaseContext _context;
+        private readonly RolesDatabaseContext _context;
 
         public RoleRepository(RolesDatabaseContext context)
         {

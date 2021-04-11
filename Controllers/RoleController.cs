@@ -15,7 +15,7 @@ namespace RoleService.Controllers
     {
         private readonly IRoleRepository _roleRepository;
 
-        public RoleController(IRoleRepository roleRepository)
+        public RoleController(IRoleRepository roleRepository, IUserRoleRepository userRoleRepository)
         {
             _roleRepository = roleRepository;
         }
@@ -50,7 +50,7 @@ namespace RoleService.Controllers
             Role role = _roleRepository.GetById(id);
             if (role == null)
             {
-                return NotFound();
+                return NotFound("Role not found");
             }
 
             _roleRepository.Remove(id);
