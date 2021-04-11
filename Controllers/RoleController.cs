@@ -45,7 +45,7 @@ namespace RoleService.Controllers
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public ActionResult<Role> Delete(Guid id, DeleteRoleRequest request)
+        public ActionResult<Role> Delete(Guid id)
         {
             Role role = _roleRepository.GetById(id);
             if (role == null)
