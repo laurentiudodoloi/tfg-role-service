@@ -1,18 +1,17 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Microsoft.OpenApi.Models;
+using Microsoft.EntityFrameworkCore;
+using RoleService.Data;
+using RoleService.Repositories;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Mvc.Routing;
+using MediatR;
 
-namespace tfg_role_service
+namespace RoleService
 {
     public class Startup
     {
@@ -26,12 +25,27 @@ namespace tfg_role_service
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddMvc(options =>
+            {
+                options.MaxValidationDepth = null;
+            });
+
+            services.AddMediatR(typeof(Startup));
 
             services.AddControllers();
-            services.AddSwaggerGen(c =>
+
+            services.AddScoped<IUrlHelper>(factory =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "tfg_role_service", Version = "v1" });
+                var actionContext = factory.GetService<IActionContextAccessor>()
+                                           .ActionContext;
+                return new UrlHelper(actionContext);
             });
+
+            services.AddDbContext<RolesDatabaseContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("RolesDatabaseContext"))
+            );
+
+            services.AddScoped<IRoleRepository, RoleRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -40,8 +54,6 @@ namespace tfg_role_service
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "tfg_role_service v1"));
             }
 
             app.UseHttpsRedirection();
