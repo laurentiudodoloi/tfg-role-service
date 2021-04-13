@@ -25,9 +25,9 @@ namespace RoleService.Repositories
             return _context.Roles.Find(id);
         }
 
-        public void Create(Role role)
+        public void Create(Role entity)
         {
-            _context.Roles.Add(role);
+            _context.Roles.Add(entity);
             _context.SaveChanges();
         }
 
