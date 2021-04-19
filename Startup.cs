@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
 using MediatR;
+using Newtonsoft.Json.Serialization;
 
 namespace RoleService
 {
@@ -29,6 +30,7 @@ namespace RoleService
             {
                 options.MaxValidationDepth = null;
             });
+
 
             services.AddMediatR(typeof(Startup));
 

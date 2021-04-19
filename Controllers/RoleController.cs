@@ -5,6 +5,8 @@ using System.Net.Mime;
 using RoleService.Repositories;
 using RoleService.Models;
 using RoleService.DTOs;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace RoleService.Controllers
 {
@@ -15,21 +17,21 @@ namespace RoleService.Controllers
     {
         private readonly IRoleRepository _roleRepository;
 
-        public RoleController(IRoleRepository roleRepository, IUserRoleRepository userRoleRepository)
+        public RoleController(IRoleRepository roleRepository)
         {
             _roleRepository = roleRepository;
         }
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public IActionResult GetAll()
+        public async Task<ActionResult<IEnumerable<Role>>> GetAll()
         {
-            return Ok(_roleRepository.GetAll());
+            return Ok(await _roleRepository.GetAll());
         }
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
-        public ActionResult<Role> Create([FromBody] CreateRoleRequest request)
+        public async Task<ActionResult<Role>> Create([FromBody] CreateRoleRequest request)
         {
             Role role = new Role
             {
@@ -37,7 +39,7 @@ namespace RoleService.Controllers
                 CreateDate = DateTime.Now
             };
 
-            _roleRepository.Create(role);
+            role = await _roleRepository.Create(role);
 
             return Created(nameof(Role), role);
         }
@@ -45,17 +47,17 @@ namespace RoleService.Controllers
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public ActionResult<Role> Delete(Guid id)
+        public async Task<ActionResult<Role>> Delete(Guid id)
         {
-            Role role = _roleRepository.GetById(id);
+            Role role = await _roleRepository.GetById(id);
             if (role == null)
             {
                 return NotFound("Role not found");
             }
 
-            _roleRepository.Remove(id);
+            var success = await _roleRepository.Remove(id);
 
-            return Ok();
+            return success ? Ok(success) : BadRequest(success);
         }
     }
 }

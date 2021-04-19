@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace RoleService.Repositories
 {
     public interface IRepository<TModel> where TModel : class
     {
-        IEnumerable<TModel> GetAll();
-        public void Create(TModel entity);
-        public TModel GetById(Guid id);
-        public void Remove(Guid id);
+        public Task<IEnumerable<TModel>> GetAll();
+        public Task<TModel> Create(TModel entity);
+        public Task<TModel> GetById(Guid id);
+        public Task<bool> Remove(Guid id);
     }
 }

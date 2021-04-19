@@ -3,6 +3,7 @@ using RoleService.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace RoleService.Repositories
 {
@@ -15,31 +16,33 @@ namespace RoleService.Repositories
             _context = context;
         }
 
-        public IEnumerable<UserRole> GetAll()
+        public async Task<IEnumerable<UserRole>> GetAll() => _context.UserRoles.ToList();
+
+        public async Task<UserRole> Create(UserRole entity)
         {
-            return _context.UserRoles.ToList();
+            UserRole userRole = await _context.UserRoles.AddAsync(entity);
+            await _context.SaveChangesAsync();
+
+            return userRole;
         }
 
-        public UserRole GetById(Guid id)
+        public async Task<UserRole> GetById(Guid id) => await _context.UserRoles.FindAsync(id);
+
+        public async Task<bool> Remove(Guid id)
         {
-            return _context.UserRoles.Find(id);
+            UserRole userRole = _context.UserRoles.Find(id);
+            if (userRole == null)
+            {
+                return false;
+            }
+
+            _context.UserRoles.Remove(userRole);
+            await _context.SaveChangesAsync();
+
+            return true;
         }
 
-        public void Create(UserRole entity)
-        {
-            _context.UserRoles.Add(entity);
-            _context.SaveChanges();
-        }
-
-        public void Remove(Guid id)
-        {
-            Role role = _context.Roles.Find(id);
-
-            _context.Roles.Remove(role);
-            _context.SaveChanges();
-        }
-
-        public IEnumerable<Role> GetUserRoles(Guid userId)
+        public async Task<IEnumerable<Role>> GetUserRoles(Guid userId)
         {
             var x = from u in _context.Users
                     from r in _context.Roles

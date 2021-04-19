@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -16,5 +17,10 @@ namespace RoleService.Models
         public Role Role { get; set; }
 
         public DateTime CreateDate { get; set; }
+
+        public static implicit operator UserRole(EntityEntry<UserRole> v)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

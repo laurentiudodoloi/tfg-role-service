@@ -5,6 +5,7 @@ using System.Net.Mime;
 using RoleService.Repositories;
 using RoleService.Models;
 using RoleService.DTOs;
+using System.Threading.Tasks;
 
 namespace RoleService.Controllers
 {
@@ -29,35 +30,36 @@ namespace RoleService.Controllers
 
         [HttpGet("{userId}")]
         [ProducesResponseType(StatusCodes.Status201Created)]
-        public ActionResult<Role> GetUserRoles(Guid userId)
+        public async Task<ActionResult<Role>> GetUserRoles(Guid userId)
         {
-            User user = _userRepository.GetById(userId);
+            User user = await _userRepository.GetById(userId);
             if (user == null)
             {
                 return NotFound("User not found");
             }
 
-            return Ok(_userRoleRepository.GetUserRoles(userId));
+            return Ok(await _userRoleRepository.GetUserRoles(userId));
         }
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
-        public ActionResult<Role> CreateUserRole([FromBody] CreateUserRoleRequest request)
+        public async Task<ActionResult<Role>> CreateUserRole([FromBody] CreateUserRoleRequest request)
         {
-            Role role = _roleRepository.GetById(request.RoleId);
+            Role role = await _roleRepository.GetById(request.RoleId);
             if (role == null)
             {
                 return NotFound("Role not found");
             }
 
-            User user = _userRepository.GetById(request.UserId);
+            User user = await _userRepository.GetById(request.UserId);
             if (user == null)
             {
                 user = new User
                 {
                     Id = request.UserId
                 };
-                _userRepository.Create(user);
+
+                user = await _userRepository.Create(user);
             }
 
             UserRole userRole = new UserRole
@@ -67,7 +69,7 @@ namespace RoleService.Controllers
                 CreateDate = DateTime.Now
             };
 
-            _userRoleRepository.Create(userRole);
+            await _userRoleRepository.Create(userRole);
 
             return Created(nameof(UserRole), null);
         }
@@ -75,9 +77,17 @@ namespace RoleService.Controllers
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public ActionResult<Role> Delete(Guid id, DeleteRoleRequest request)
+        public async Task<ActionResult> Delete(Guid id, DeleteRoleRequest request)
         {
-            throw new NotImplementedException();
+            UserRole userRole = await _userRoleRepository.GetById(id);
+            if (userRole == null)
+            {
+                return NotFound("Not found");
+            }
+
+            var success = await _userRoleRepository.Remove(id);
+
+            return success ? Ok(success) : BadRequest(success);
         }
     }
 }
