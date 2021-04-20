@@ -16,7 +16,7 @@ namespace RoleService.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<Role>> GetAll() => _context.Roles.ToList();
+        public Task<List<Role>> GetAll() => Task.FromResult(_context.Roles.ToList());
 
         public async Task<Role> GetById(Guid id) => await _context.Roles.FindAsync(id);
 

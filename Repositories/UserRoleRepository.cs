@@ -16,7 +16,7 @@ namespace RoleService.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<UserRole>> GetAll() => _context.UserRoles.ToList();
+        public Task<List<UserRole>> GetAll() => Task.FromResult(_context.UserRoles.ToList());
 
         public async Task<UserRole> Create(UserRole entity)
         {
@@ -42,9 +42,9 @@ namespace RoleService.Repositories
             return true;
         }
 
-        public async Task<IEnumerable<Role>> GetUserRoles(Guid userId)
+        public Task<List<Role>> GetUserRoles(Guid userId)
         {
-            var x = from u in _context.Users
+            var roles = from u in _context.Users
                     from r in _context.Roles
                     from ur in _context.UserRoles
                     where u.Id == userId
@@ -52,7 +52,7 @@ namespace RoleService.Repositories
                     where r.Id == ur.RoleId
                     select r;
 
-            return x.ToList<Role>();
+            return Task.FromResult(roles.ToList<Role>());
         }
     }
 }

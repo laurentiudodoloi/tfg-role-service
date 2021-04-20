@@ -16,7 +16,7 @@ namespace RoleService.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<User>> GetAll() => _context.Users.ToList();
+        public Task<List<User>> GetAll() => Task.FromResult(_context.Users.ToList());
 
         public async Task<User> Create(User entity)
         {

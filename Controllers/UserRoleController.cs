@@ -62,7 +62,7 @@ namespace RoleService.Controllers
                     Id = request.UserId
                 };
 
-                user = await _userRepository.Create(user);
+                await _userRepository.Create(user);
             }
 
             UserRole userRole = new UserRole

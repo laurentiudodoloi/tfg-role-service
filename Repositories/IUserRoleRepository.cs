@@ -7,6 +7,6 @@ namespace RoleService.Repositories
 {
     public interface IUserRoleRepository : IRepository<UserRole>
     {
-        public Task<IEnumerable<Role>> GetUserRoles(Guid userId);
+        public Task<List<Role>> GetUserRoles(Guid userId);
     }
 }
