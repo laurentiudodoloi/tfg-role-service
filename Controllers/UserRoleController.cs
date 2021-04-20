@@ -6,6 +6,7 @@ using RoleService.Repositories;
 using RoleService.Models;
 using RoleService.DTOs;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace RoleService.Controllers
 {
@@ -29,8 +30,9 @@ namespace RoleService.Controllers
         }
 
         [HttpGet("{userId}")]
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        public async Task<ActionResult<Role>> GetUserRoles(Guid userId)
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult<IEnumerable<Role>>> GetUserRoles(Guid userId)
         {
             User user = await _userRepository.GetById(userId);
             if (user == null)
@@ -43,6 +45,7 @@ namespace RoleService.Controllers
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<Role>> CreateUserRole([FromBody] CreateUserRoleRequest request)
         {
             Role role = await _roleRepository.GetById(request.RoleId);
@@ -71,23 +74,7 @@ namespace RoleService.Controllers
 
             await _userRoleRepository.Create(userRole);
 
-            return Created(nameof(UserRole), null);
-        }
-
-        [HttpDelete("{id}")]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult> Delete(Guid id, DeleteRoleRequest request)
-        {
-            UserRole userRole = await _userRoleRepository.GetById(id);
-            if (userRole == null)
-            {
-                return NotFound("Not found");
-            }
-
-            var success = await _userRoleRepository.Remove(id);
-
-            return success ? Ok(success) : BadRequest(success);
+            return CreatedAtAction(nameof(UserRole), null);
         }
     }
 }

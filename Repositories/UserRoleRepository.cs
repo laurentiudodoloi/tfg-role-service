@@ -20,10 +20,10 @@ namespace RoleService.Repositories
 
         public async Task<UserRole> Create(UserRole entity)
         {
-            UserRole userRole = await _context.UserRoles.AddAsync(entity);
+            await _context.UserRoles.AddAsync(entity);
             await _context.SaveChangesAsync();
 
-            return userRole;
+            return entity;
         }
 
         public async Task<UserRole> GetById(Guid id) => await _context.UserRoles.FindAsync(id);

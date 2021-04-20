@@ -41,12 +41,12 @@ namespace RoleService.Controllers
 
             role = await _roleRepository.Create(role);
 
-            return Created(nameof(Role), role);
+            return CreatedAtAction(nameof(Role), role);
         }
 
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<ActionResult<Role>> Delete(Guid id)
         {
             Role role = await _roleRepository.GetById(id);
@@ -55,9 +55,9 @@ namespace RoleService.Controllers
                 return NotFound("Role not found");
             }
 
-            var success = await _roleRepository.Remove(id);
+            await _roleRepository.Remove(id);
 
-            return success ? Ok(success) : BadRequest(success);
+            return NoContent();
         }
     }
 }

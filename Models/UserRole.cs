@@ -17,10 +17,5 @@ namespace RoleService.Models
         public Role Role { get; set; }
 
         public DateTime CreateDate { get; set; }
-
-        public static implicit operator UserRole(EntityEntry<UserRole> v)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

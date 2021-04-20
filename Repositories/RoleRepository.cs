@@ -22,10 +22,10 @@ namespace RoleService.Repositories
 
         public async Task<Role> Create(Role entity)
         {
-            Role role = await _context.Roles.AddAsync(entity);
+            await _context.Roles.AddAsync(entity);
             await _context.SaveChangesAsync();
 
-            return role;
+            return entity;
         }
 
         public async Task<bool> Remove(Guid id)
