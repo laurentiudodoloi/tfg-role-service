@@ -3,6 +3,7 @@ using RoleService.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace RoleService.Repositories
 {
@@ -15,28 +16,30 @@ namespace RoleService.Repositories
             _context = context;
         }
 
-        public IEnumerable<User> GetAll()
+        public Task<List<User>> GetAll() => Task.FromResult(_context.Users.ToList());
+
+        public async Task<User> Create(User entity)
         {
-            return _context.Users.ToList();
+            await _context.Users.AddAsync(entity);
+            await _context.SaveChangesAsync();
+
+            return entity;
         }
 
-        public User GetById(Guid id)
-        {
-            return _context.Users.Find(id);
-        }
+        public async Task<User> GetById(Guid id) => await _context.Users.FindAsync(id);
 
-        public void Create(User entity)
-        {
-            _context.Users.Add(entity);
-            _context.SaveChanges();
-        }
-
-        public void Remove(Guid id)
+        public async Task<bool> Remove(Guid id)
         {
             User user = _context.Users.Find(id);
+            if (user == null)
+            {
+                return false;
+            }
 
             _context.Users.Remove(user);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
+
+            return true;
         }
     }
 }

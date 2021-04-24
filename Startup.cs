@@ -30,6 +30,7 @@ namespace RoleService
                 options.MaxValidationDepth = null;
             });
 
+
             services.AddMediatR(typeof(Startup));
 
             services.AddControllers();

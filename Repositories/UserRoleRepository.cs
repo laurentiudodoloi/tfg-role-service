@@ -3,6 +3,7 @@ using RoleService.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace RoleService.Repositories
 {
@@ -15,33 +16,35 @@ namespace RoleService.Repositories
             _context = context;
         }
 
-        public IEnumerable<UserRole> GetAll()
+        public Task<List<UserRole>> GetAll() => Task.FromResult(_context.UserRoles.ToList());
+
+        public async Task<UserRole> Create(UserRole entity)
         {
-            return _context.UserRoles.ToList();
+            await _context.UserRoles.AddAsync(entity);
+            await _context.SaveChangesAsync();
+
+            return entity;
         }
 
-        public UserRole GetById(Guid id)
+        public async Task<UserRole> GetById(Guid id) => await _context.UserRoles.FindAsync(id);
+
+        public async Task<bool> Remove(Guid id)
         {
-            return _context.UserRoles.Find(id);
+            UserRole userRole = _context.UserRoles.Find(id);
+            if (userRole == null)
+            {
+                return false;
+            }
+
+            _context.UserRoles.Remove(userRole);
+            await _context.SaveChangesAsync();
+
+            return true;
         }
 
-        public void Create(UserRole entity)
+        public Task<List<Role>> GetUserRoles(Guid userId)
         {
-            _context.UserRoles.Add(entity);
-            _context.SaveChanges();
-        }
-
-        public void Remove(Guid id)
-        {
-            Role role = _context.Roles.Find(id);
-
-            _context.Roles.Remove(role);
-            _context.SaveChanges();
-        }
-
-        public IEnumerable<Role> GetUserRoles(Guid userId)
-        {
-            var x = from u in _context.Users
+            var roles = from u in _context.Users
                     from r in _context.Roles
                     from ur in _context.UserRoles
                     where u.Id == userId
@@ -49,7 +52,7 @@ namespace RoleService.Repositories
                     where r.Id == ur.RoleId
                     select r;
 
-            return x.ToList<Role>();
+            return Task.FromResult(roles.ToList<Role>());
         }
     }
 }
