@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Data.SqlClient;
 
 namespace RoleService.Repositories
 {
@@ -38,6 +39,18 @@ namespace RoleService.Repositories
 
             _context.Roles.Remove(role);
             await _context.SaveChangesAsync();
+
+            return true;
+        }
+
+        public async Task<bool> Cleanup()
+        {
+            List<Role> roles = _context.Roles.ToList();
+            for (int i = 0; i < roles.Count; ++i)
+            {
+                _context.Roles.Remove(roles[i]);
+                await _context.SaveChangesAsync();
+            }
 
             return true;
         }

@@ -41,7 +41,7 @@ namespace RoleService.Controllers
 
             role = await _roleRepository.Create(role);
 
-            return CreatedAtAction(nameof(Role), role);
+            return Created(nameof(Role), role);
         }
 
         [HttpDelete("{id}")]
@@ -56,6 +56,14 @@ namespace RoleService.Controllers
             }
 
             await _roleRepository.Remove(id);
+
+            return NoContent();
+        }
+
+        [HttpOptions("cleanup")]
+        public async Task<ActionResult> Cleanup()
+        {
+            await _roleRepository.Cleanup();
 
             return NoContent();
         }

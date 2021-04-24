@@ -74,7 +74,7 @@ namespace RoleService.Controllers
 
             await _userRoleRepository.Create(userRole);
 
-            return CreatedAtAction(nameof(UserRole), null);
+            return Created(nameof(UserRole), null);
         }
     }
 }
