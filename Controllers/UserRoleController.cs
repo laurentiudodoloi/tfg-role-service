@@ -76,5 +76,39 @@ namespace RoleService.Controllers
 
             return Created(nameof(UserRole), null);
         }
+
+        [HttpPost("assign")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<Role>> AssignRoleToUser([FromBody] AssignRoleRequest request)
+        {
+            Role role = await _roleRepository.GetByName(request.Role);
+            if (role == null)
+            {
+                return NotFound("Role not found");
+            }
+
+            User user = await _userRepository.GetById(request.UserId);
+            if (user == null)
+            {
+                user = new User
+                {
+                    Id = request.UserId
+                };
+
+                await _userRepository.Create(user);
+            }
+
+            UserRole userRole = new UserRole
+            {
+                UserId = request.UserId,
+                RoleId = role.Id,
+                CreateDate = DateTime.Now
+            };
+
+            await _userRoleRepository.Create(userRole);
+
+            return Created(nameof(UserRole), null);
+        }
     }
 }

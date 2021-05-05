@@ -5,8 +5,6 @@ VisualStudioVersion = 16.0.31005.135
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "tfg-role-service", "tfg-role-service.csproj", "{496D443B-10B0-4054-8ED9-021E64C98773}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "tfg-role-serviceTests", "..\tfg-role-serviceTests\tfg-role-serviceTests.csproj", "{4E2B39DE-583B-4837-B863-C38776005596}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

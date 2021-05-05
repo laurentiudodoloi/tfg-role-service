@@ -21,6 +21,8 @@ namespace RoleService.Repositories
 
         public async Task<Role> GetById(Guid id) => await _context.Roles.FindAsync(id);
 
+        public Task<Role> GetByName(string name) => Task.FromResult(_context.Roles.Where(r => r.Name == name).FirstOrDefault());
+
         public async Task<Role> Create(Role entity)
         {
             await _context.Roles.AddAsync(entity);
