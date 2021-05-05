@@ -1,6 +1,0 @@
-projectKey=role-service
-serverUrl=http://localhost:9000
-serverVersion=8.8.0.42792
-dashboardUrl=http://localhost:9000/dashboard?id=role-service
-ceTaskId=AXj5gR5sOQgUBbOMA7aw
-ceTaskUrl=http://localhost:9000/api/ce/task?id=AXj5gR5sOQgUBbOMA7aw
